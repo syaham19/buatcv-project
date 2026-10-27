@@ -35,6 +35,10 @@ const maxPhotoBytes = 5 * 1024 * 1024
 
 // validasi: judul dan nama wajib, email opsional tetapi harus valid jika diisi.
 func validasi(title string, data []byte) error {
+	return validasiCV(title, data, true)
+}
+
+func validasiCV(title string, data []byte, requireName bool) error {
 	if strings.TrimSpace(title) == "" || utf8.RuneCountInString(strings.TrimSpace(title)) > 255 {
 		return ErrInvalid
 	}
@@ -51,7 +55,7 @@ func validasi(title string, data []byte) error {
 	if err := json.Unmarshal(data, &cvData); err != nil {
 		return ErrInvalid
 	}
-	if strings.TrimSpace(cvData.Contact.Name) == "" {
+	if requireName && strings.TrimSpace(cvData.Contact.Name) == "" {
 		return ErrInvalid
 	}
 	email := strings.TrimSpace(cvData.Contact.Email)
@@ -93,7 +97,7 @@ func jsonValid(data []byte) bool {
 
 // create: CV baru milik userID.
 func create(db *gorm.DB, userID uint, title string, data []byte) (*models.CV, error) {
-	if err := validasi(title, data); err != nil {
+	if err := validasiCV(title, data, false); err != nil {
 		return nil, err
 	}
 	doc := &models.CV{UserID: userID, Title: strings.TrimSpace(title), Data: data}

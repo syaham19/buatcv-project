@@ -54,3 +54,30 @@ func TestValidasiCV(t *testing.T) {
 		})
 	}
 }
+
+func TestValidasiDraftCV(t *testing.T) {
+	tests := []struct {
+		name  string
+		title string
+		data  string
+		valid bool
+	}{
+		{name: "draft boleh tanpa nama", title: "CV Tanpa Judul", data: `{"contact":{}}`, valid: true},
+		{name: "email tidak valid tetap ditolak", title: "CV Saya", data: `{"contact":{"email":"salah"}}`},
+		{name: "foto tidak valid tetap ditolak", title: "CV Saya", data: `{"contact":{"photo":"data:image/svg+xml;base64,PHN2Zz4="}}`},
+		{name: "judul tetap wajib", title: " ", data: `{"contact":{}}`},
+		{name: "json tetap harus valid", title: "CV Saya", data: `{"contact":`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validasiCV(tt.title, []byte(tt.data), false)
+			if tt.valid && err != nil {
+				t.Fatalf("validasiCV() error = %v, ingin nil", err)
+			}
+			if !tt.valid && !errors.Is(err, ErrInvalid) {
+				t.Fatalf("validasiCV() error = %v, ingin ErrInvalid", err)
+			}
+		})
+	}
+}
