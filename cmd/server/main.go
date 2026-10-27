@@ -26,7 +26,9 @@ func main() {
 
 	defer database.Close(db)
 
-	r := newRouter() // Tahap 2: daftarkan route auth dan CV di sini
+	database.Migrate(db)
+
+	r := newRouter(db)
 
 	addr := fmt.Sprintf(":%d", cfg.AppPort)
 	log.Printf("server berjalan di http://localhost%s", addr)
