@@ -1,0 +1,17 @@
+# Template untuk menjalankan aplikasi di development.
+# Salin file ini jadi run-dev.sh, isi nilai aslinya, lalu jalankan:  sh run-dev.sh
+# run-dev.sh ada di .gitignore — JANGAN commit file berisi kredensial asli.
+
+# Connection string PostgreSQL. Ganti user/pass/nama-database sesuai komputer Anda.
+# Buat database-nya dulu jika belum ada:
+#   createdb cvats          (atau: psql -c "CREATE DATABASE cvats;")
+DATABASE_URL="postgres://user:password@localhost:5432/cvats"
+
+# Kode SESSION_SECRET belum dipakai aplikasi saat ini; tetap divalidasi agar
+# tersedia. Generator:  openssl rand -hex 32
+SESSION_SECRET=""
+
+# Opsional (default 8080)
+APP_PORT=8080
+
+go run ./cmd/server
