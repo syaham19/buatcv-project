@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"cvats-opencode/internal/auth"
-	"cvats-opencode/internal/models"
+	"cvats-opencode/internal/cv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -30,11 +30,20 @@ func newRouter(db *gorm.DB) *gin.Engine {
 		authGroup.GET("/me", auth.Me(db))
 	}
 
-	// Contoh endpoint terlindungi (bukti middleware bekerja)
-	r.GET("/api/protected", auth.RequireAuth(db), func(c *gin.Context) {
-		user := c.MustGet("user").(*models.User)
-		c.JSON(http.StatusOK, gin.H{"message": "halo " + user.Email})
-	})
+	// Endpoint CV (wajib login: Ownership check via RequireAuth)
+	cvGroup := r.Group("/api/cv", auth.RequireAuth(db))
+	{
+		cvGroup.GET("", cv.List(db))
+		cvGroup.POST("", cv.Create(db))
+		cvGroup.GET("/:id", cv.Get(db))
+		cvGroup.PUT("/:id", cv.Update(db))
+		cvGroup.DELETE("/:id", cv.Delete(db))
+	}
+
+	// Folder static: landing, login, dashboard, editor, preview, CSS, JS
+	r.Static("/static", "./static")
+
+	// Tambahkan rute halaman (page route) di tahap frontend
 
 	return r
 }
