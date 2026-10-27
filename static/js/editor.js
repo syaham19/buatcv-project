@@ -207,6 +207,12 @@ $('#save').addEventListener('click', async () => {
   setTimeout(() => showMsg(''), 2000);
 });
 
+$('#export').addEventListener('click', () => {
+  // Opsi 1 (disetujui): ekspor via dialog print browser -> Save as PDF.
+  // Hasil PDF berasal dari preview CV yang teksnya selectable.
+  window.print();
+});
+
 // Logout di header
 $('#logout').addEventListener('click', async () => {
   await apiFetch('/api/auth/logout', 'POST'); // sesi di database juga dihapus

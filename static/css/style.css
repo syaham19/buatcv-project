@@ -66,5 +66,19 @@ th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size
 
 /* Cekackbar */
 .entry .row .btn{flex:none}
+/* ---------- Cetak (Save as PDF) hanya preview CV ---------- */
+@media print {
+  body{background:#fff}
+  .topbar, .pane > :not(.pane-preview), button, #msg, #savehint{display:none !important}
+  header.topbar{display:none !important}
+  html, body{margin:0;padding:0}
+  .split{display:block;max-width:none;margin:0;padding:0}
+  .pane-preview{background:#fff;border:none;border-radius:0;padding:0;position:static}
+  .pane-preview h2{display:none}
+  .cv{padding:0;border:none}
+  /* judul CV (f-title) berada di dalam form pane, ikut disembunyikan;
+     preview hanya menampilkan isi CV */
+}
+
 /* Proyek (bagian opsional kosong tidak ditampilkan) */
 .muted{color:var(--muted)}
