@@ -20,6 +20,22 @@ type payload struct {
 	Data  json.RawMessage `json:"data"`
 }
 
+const maxCVPayloadBytes = 8 << 20
+
+func bindPayload(c *gin.Context, p *payload) bool {
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxCVPayloadBytes)
+	if err := c.ShouldBindJSON(p); err != nil {
+		var tooLarge *http.MaxBytesError
+		if errors.As(err, &tooLarge) {
+			c.JSON(http.StatusRequestEntityTooLarge, gin.H{"error": "Ukuran data CV melebihi batas yang diizinkan."})
+			return false
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": "data tidak valid"})
+		return false
+	}
+	return true
+}
+
 // UserIDFromContext mengambil pengguna dari sesi (dipasang RequireAuth).
 func UserIDFromContext(c *gin.Context) (uint, bool) {
 	user, ok := c.Get("user")
@@ -57,14 +73,13 @@ func Create(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 		var p payload
-		if err := c.ShouldBindJSON(&p); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "data tidak valid"})
+		if !bindPayload(c, &p) {
 			return
 		}
 		doc, err := create(db, userID, p.Title, p.Data)
 		switch {
 		case errors.Is(err, ErrInvalid):
-			c.JSON(http.StatusBadRequest, gin.H{"error": "judul dan isi wajib ada"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Pastikan judul dan nama lengkap diisi, email valid jika diisi, serta foto JPG/PNG maksimal 5 MB."})
 			return
 		case err != nil:
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "gagal menyimpan cv"})
@@ -120,8 +135,7 @@ func Update(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 		var p payload
-		if err := c.ShouldBindJSON(&p); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "data tidak valid"})
+		if !bindPayload(c, &p) {
 			return
 		}
 		doc, err := update(db, userID, id, p.Title, p.Data)
@@ -130,7 +144,7 @@ func Update(db *gorm.DB) gin.HandlerFunc {
 			c.JSON(http.StatusNotFound, gin.H{"error": "cv tidak ditemukan"})
 			return
 		case errors.Is(err, ErrInvalid):
-			c.JSON(http.StatusBadRequest, gin.H{"error": "judul dan isi wajib ada"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Pastikan judul dan nama lengkap diisi, email valid jika diisi, serta foto JPG/PNG maksimal 5 MB."})
 			return
 		case err != nil:
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "gagal menyimpan cv"})

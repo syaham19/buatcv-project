@@ -11,7 +11,7 @@ import (
 )
 
 func Migrate(db *gorm.DB) {
-	if err := db.AutoMigrate(&models.User{}, &models.Session{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}, &models.Session{}, &models.CV{}); err != nil {
 		log.Fatalf("migrasi database gagal: %v", err)
 	}
 }

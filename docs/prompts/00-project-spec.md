@@ -21,9 +21,9 @@
 1. Landing page.
 2. Register, login, logout.
 3. Dashboard / daftar CV.
-4. Form editor CV: kontak, ringkasan, pengalaman kerja, pendidikan,
-   keterampilan, bagian opsional. Entri berulang bisa ditambah, diedit,
-   dihapus, dan diurutkan.
+4. Form editor CV: kontak, foto profil opsional, ringkasan, pengalaman kerja,
+   pengalaman organisasi opsional, pendidikan, keterampilan, tools, dan bagian
+   opsional. Entri berulang bisa ditambah, diedit, dihapus, dan diurutkan.
 5. Preview CV yang mendekati hasil ekspor.
 6. Simpan CV ke database per pengguna.
 7. Ekspor PDF dengan teks selectable.

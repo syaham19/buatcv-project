@@ -3,33 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login / Daftar — ATS CV Generator</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Login / Daftar: ATS CV Generator</title>
+<link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="authpage">
-<main class="card">
-  <h1>Login / Daftar</h1>
-  <p class="muted">Satu form, dua aksi: kartu di bawah kirim ke endpoint <code>/login</code> atau <code>/register</code>.</p>
-
-  <form id="form" autocomplete="off">
-    <label>Email
-      <input type="email" name="email" required placeholder="nama@example.com">
-    </label>
-    <label>Password (min. 8 karakter)
-      <input type="password" name="password" minlength="8" required placeholder="minimal 8 karakter">
-    </label>
-
-    <p id="msg" class="error" hidden></p>
-
-    <div class="row">
-      <button class="btn btn-primary" type="submit" data-action="login">Login</button>
-      <button class="btn" type="submit" data-action="register">Daftar</button>
+<div class="auth-layout">
+  <main class="card auth-card">
+    <div class="auth-header">
+      <button class="btn btn-sm" type="button" data-theme-toggle aria-pressed="false">Mode gelap</button>
     </div>
-  </form>
+    <p class="auth-eyebrow">Akun Anda</p>
+    <h1>Login / Daftar</h1>
+    <p class="muted">Masuk atau buat akun untuk menyimpan dan mengelola CV Anda.</p>
 
-  <p><a href="index.html">← kembali ke halaman awal</a></p>
-</main>
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
+    <form id="form" autocomplete="on">
+      <label>Email
+        <input id="email" type="email" name="email" autocomplete="email" required spellcheck="false" placeholder="nama@example.com">
+      </label>
+      <label>Password
+        <input id="password" type="password" name="password" autocomplete="current-password" minlength="8" required aria-describedby="password-hint" placeholder="Minimal 8 karakter">
+      </label>
+      <p id="password-hint" class="muted">Gunakan minimal 8 karakter.</p>
+
+      <p id="msg" class="error" role="alert" hidden></p>
+      <p id="auth-status" class="success" role="status" hidden></p>
+
+      <div class="row">
+        <button class="btn btn-primary" type="submit" data-action="login">Login</button>
+        <button class="btn" type="submit" data-action="register">Daftar</button>
+      </div>
+    </form>
+
+    <p><a href="/">Kembali ke halaman awal</a></p>
+  </main>
+
+  <aside class="auth-visual" aria-labelledby="auth-visual-title">
+    <p class="auth-brand">ATS CV Generator</p>
+    <div class="auth-visual-copy">
+      <p class="auth-eyebrow">Ruang kerja CV Anda</p>
+      <h2 id="auth-visual-title">Susun pengalaman menjadi cerita karier.</h2>
+      <p>Satukan pengalaman kerja, pendidikan, dan keterampilan dalam satu CV.</p>
+    </div>
+
+    <figure class="cv-illustration">
+      <div class="cv-illustration-heading">
+        <span class="cv-illustration-mark" aria-hidden="true">CV</span>
+        <div>
+          <strong>[Nama lengkap]</strong>
+          <span>[Posisi profesional]</span>
+        </div>
+      </div>
+      <p class="cv-illustration-contact">[Email] · [Kota, negara]</p>
+      <section>
+        <h3>Ringkasan</h3>
+        <p>[Ringkasan profesional]</p>
+      </section>
+      <div class="cv-illustration-columns">
+        <section>
+          <h3>Pengalaman</h3>
+          <p>[Peran dan perusahaan]</p>
+        </section>
+        <section>
+          <h3>Pendidikan</h3>
+          <p>[Gelar dan institusi]</p>
+        </section>
+      </div>
+      <section>
+        <h3>Keterampilan</h3>
+        <p>[Keterampilan yang relevan]</p>
+      </section>
+      <figcaption class="auth-visual-note">Contoh struktur. Isi CV mengikuti informasi yang Anda masukkan.</figcaption>
+    </figure>
+  </aside>
+</div>
+<script src="/static/js/theme.js"></script>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/auth.js"></script>
 </body>
 </html>

@@ -3,29 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard — ATS CV Generator</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Dashboard: ATS CV Generator</title>
+<link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="dash">
+<a class="skip-link" href="#main-content">Lewati ke konten</a>
 <header class="topbar">
   <strong>ATS CV Generator</strong>
-  <span id="who" class="muted"></span>
-  <button id="logout" class="btn">Logout</button>
+  <span class="spacer"></span>
+  <div class="header-actions">
+    <span id="who" class="muted"></span>
+    <button class="btn" type="button" data-theme-toggle aria-pressed="false">Mode gelap</button>
+    <button id="logout" class="btn">Logout</button>
+  </div>
 </header>
 
-<main>
-  <h1>CV Saya</h1>
-  <button id="newCV" class="btn btn-primary">+ Buat CV baru</button>
-  <p id="msg" class="error" hidden></p>
+<main class="dashboard" id="main-content">
+  <div class="dashboard-head">
+    <div>
+      <h1>CV Saya</h1>
+      <p>Kelola dokumen dan lanjutkan penyuntingan.</p>
+    </div>
+    <button id="newCV" class="btn btn-primary">+ Buat CV baru</button>
+  </div>
+  <p id="authStatus" class="success" role="status" hidden></p>
+  <p id="loading" class="loading" role="status">Memuat daftar CV...</p>
+  <p id="msg" class="error" role="alert" hidden></p>
 
-  <table id="table" hidden>
-    <thead><tr><th>Judul</th><th>Terakhir diubah</th><th>Aksi</th></tr></thead>
-    <tbody></tbody>
-  </table>
-  <p id="empty" class="muted" hidden>Belum ada CV. Klik "Buat CV baru" untuk memulai.</p>
+  <div id="tableWrap" class="table-wrap" hidden>
+    <table id="table" hidden>
+      <thead><tr><th>Judul</th><th>Terakhir diubah</th><th>Aksi</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p id="empty" class="empty-state" hidden>Belum ada CV. Klik "Buat CV baru" untuk memulai.</p>
 </main>
 
-<script src="js/api.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="/static/js/theme.js"></script>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/dashboard.js"></script>
 </body>
 </html>

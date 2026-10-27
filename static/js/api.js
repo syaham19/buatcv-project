@@ -8,8 +8,8 @@ async function apiFetch(url, method = 'GET', body) {
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (res.status === 401 && !location.pathname.endsWith('login.html')) {
-    location.href = 'login.html';
+  if (res.status === 401 && location.pathname !== '/login') {
+    location.href = '/login';
     return { ok: false, data: { error: 'belum login' } };
   }
 

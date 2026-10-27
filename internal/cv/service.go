@@ -8,8 +8,15 @@
 package cv
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	"regexp"
+	"strings"
 	"unicode/utf8"
 
 	"cvats-opencode/internal/models"
@@ -22,13 +29,59 @@ var (
 	ErrInvalid  = errors.New("data cv tidak valid")
 )
 
-// validasi: judul wajib ada dan Data harus JSON yang sah.
+var emailRe = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
+
+const maxPhotoBytes = 5 * 1024 * 1024
+
+// validasi: judul dan nama wajib, email opsional tetapi harus valid jika diisi.
 func validasi(title string, data []byte) error {
-	if len(title) == 0 || utf8.RuneCountInString(title) > 255 {
+	if strings.TrimSpace(title) == "" || utf8.RuneCountInString(strings.TrimSpace(title)) > 255 {
 		return ErrInvalid
 	}
 	if len(data) == 0 || !jsonValid(data) {
 		return ErrInvalid
+	}
+	var cvData struct {
+		Contact struct {
+			Name  string `json:"name"`
+			Email string `json:"email"`
+			Photo string `json:"photo"`
+		} `json:"contact"`
+	}
+	if err := json.Unmarshal(data, &cvData); err != nil {
+		return ErrInvalid
+	}
+	if strings.TrimSpace(cvData.Contact.Name) == "" {
+		return ErrInvalid
+	}
+	email := strings.TrimSpace(cvData.Contact.Email)
+	if email != "" && !emailRe.MatchString(email) {
+		return ErrInvalid
+	}
+	if photo := cvData.Contact.Photo; photo != "" {
+		var prefix string
+		expectedFormat := ""
+		switch {
+		case strings.HasPrefix(photo, "data:image/jpeg;base64,"):
+			prefix = "data:image/jpeg;base64,"
+			expectedFormat = "jpeg"
+		case strings.HasPrefix(photo, "data:image/png;base64,"):
+			prefix = "data:image/png;base64,"
+			expectedFormat = "png"
+		default:
+			return ErrInvalid
+		}
+		encoded := strings.TrimPrefix(photo, prefix)
+		if len(encoded) > base64.StdEncoding.EncodedLen(maxPhotoBytes) {
+			return ErrInvalid
+		}
+		imageData, err := base64.StdEncoding.DecodeString(encoded)
+		if err != nil || len(imageData) > maxPhotoBytes {
+			return ErrInvalid
+		}
+		if _, format, err := image.DecodeConfig(bytes.NewReader(imageData)); err != nil || format != expectedFormat {
+			return ErrInvalid
+		}
 	}
 	return nil
 }
@@ -43,7 +96,7 @@ func create(db *gorm.DB, userID uint, title string, data []byte) (*models.CV, er
 	if err := validasi(title, data); err != nil {
 		return nil, err
 	}
-	doc := &models.CV{UserID: userID, Title: title, Data: data}
+	doc := &models.CV{UserID: userID, Title: strings.TrimSpace(title), Data: data}
 	if err := db.Create(doc).Error; err != nil {
 		return nil, err
 	}
@@ -76,7 +129,7 @@ func update(db *gorm.DB, userID, cvID uint, title string, data []byte) (*models.
 	if err != nil {
 		return nil, err
 	}
-	doc.Title = title
+	doc.Title = strings.TrimSpace(title)
 	doc.Data = data
 	if err := db.Save(doc).Error; err != nil {
 		return nil, err

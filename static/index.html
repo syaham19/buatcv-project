@@ -4,18 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ATS CV Generator</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="landing">
+<a class="skip-link" href="#main-content">Lewati ke konten</a>
 <header class="topbar">
   <strong>ATS CV Generator</strong>
-  <nav><a class="btn" href="login.html">Login / Daftar</a></nav>
+  <nav>
+    <button class="btn" type="button" data-theme-toggle aria-pressed="false">Mode gelap</button>
+    <a class="btn btn-primary" href="/login">Login / Daftar</a>
+  </nav>
 </header>
 
-<main class="hero">
-  <h1>Buat CV ramah ATS<br><span class="muted">— gratis, tanpa paywall download.</span></h1>
+<main class="hero" id="main-content">
+  <h1>Buat CV ramah ATS<br><span class="muted">Gratis, tanpa biaya unduh.</span></h1>
   <p>Isi form sederhana, lihat preview, ekspor PDF dengan teks yang bisa dipilih dan dibaca
-     oleh mesin. Aplikasi membantu memakai struktur & format ramah ATS — bukan jaminan
+     oleh mesin. Aplikasi membantu memakai struktur & format ramah ATS, bukan jaminan
      CV pasti lolos ATS.</p>
 
   <!-- DOKUMENTASI FORMAT (ketentuan spesifikasi: pengguna tahu format ekspor sebelum mulai) -->
@@ -24,9 +28,10 @@
     gratis, tanpa biaya tersembunyi.
   </div>
 
-  <p><a class="btn btn-primary btn-lg" href="login.html">Mulai sekarang</a></p>
+  <p><a class="btn btn-primary btn-lg" href="/login">Buat CV Anda</a></p>
 </main>
 
-<footer class="footer muted">ATS CV Generator — MVP.</footer>
+<footer class="footer muted">ATS CV Generator</footer>
+<script src="/static/js/theme.js"></script>
 </body>
 </html>

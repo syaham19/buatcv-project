@@ -3,63 +3,159 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Editor CV — ATS CV Generator</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Editor CV: ATS CV Generator</title>
+<link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="editor">
+<a class="skip-link" href="#main-content">Lewati ke konten</a>
 <header class="topbar">
   <strong>ATS CV Generator</strong>
   <span class="spacer"></span>
-  <a class="btn" href="dashboard.html">← Dashboard</a>
-  <button id="logout" class="btn">Logout</button>
+  <div class="header-actions">
+    <button class="btn" type="button" data-theme-toggle aria-pressed="false">Mode gelap</button>
+    <a class="btn" href="/dashboard">Dashboard</a>
+    <button id="logout" class="btn">Logout</button>
+  </div>
 </header>
 
-<main class="split">
+<main class="split" id="main-content">
   <!-- KIRI: FORM EDITOR -->
   <section class="pane">
     <h1 id="titleBar">Form Editor</h1>
-    <p id="msg" class="error" hidden></p>
+    <p id="editorLoading" class="loading" role="status">Memuat dokumen...</p>
+    <p id="msg" class="error" role="alert" hidden></p>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <span id="toast-message"></span>
+      <button id="toast-dismiss" class="toast-dismiss" type="button" aria-label="Tutup notifikasi">×</button>
+    </div>
 
-    <label>Judul CV (untuk membedakan versi)
-      <input id="f-title" type="text" placeholder="mis. CV Product Designer">
-    </label>
+    <label for="f-title">Judul CV</label>
+    <input id="f-title" type="text" maxlength="255" aria-describedby="f-title-error" placeholder="Contoh: CV Product Designer">
+    <p id="f-title-error" class="field-error" hidden></p>
 
-    <h2>Kontak & Data Diri</h2>
-    <input id="f-name" type="text" placeholder="Nama lengkap">
-    <input id="f-email" type="email" placeholder="Email">
-    <input id="f-phone" type="text" placeholder="Telepon">
-    <input id="f-location" type="text" placeholder="Kota, Negara">
+    <section class="editor-section" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Kontak dan data diri</h2>
+      <div class="form-grid">
+        <div>
+          <label for="f-name">Nama lengkap</label>
+          <input id="f-name" type="text" autocomplete="name" aria-describedby="f-name-error" placeholder="Nama lengkap">
+          <p id="f-name-error" class="field-error" hidden></p>
+        </div>
+        <div>
+          <label for="f-email">Email (opsional)</label>
+          <input id="f-email" type="email" autocomplete="email" spellcheck="false" aria-describedby="f-email-error" placeholder="nama@example.com">
+          <p id="f-email-error" class="field-error" hidden></p>
+        </div>
+        <label>Telepon<input id="f-phone" type="tel" autocomplete="tel" placeholder="Nomor telepon"></label>
+        <label>Kota dan negara<input id="f-location" type="text" autocomplete="address-level2" placeholder="Kota, negara"></label>
+      </div>
+      <div class="photo-field">
+        <label for="f-photo">Foto profil (opsional)</label>
+        <input id="f-photo" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" aria-describedby="photo-hint photo-error">
+        <p id="photo-hint" class="muted">JPG atau PNG, maksimal 5 MB.</p>
+        <p id="photo-error" class="field-error" hidden></p>
+        <p id="photo-status" class="sr-only" role="status" aria-live="polite"></p>
+        <button id="photo-remove" class="btn btn-sm" type="button" hidden>Hapus foto</button>
+      </div>
+    </section>
 
-    <h2>Ringkasan</h2>
-    <textarea id="f-summary" rows="3" placeholder="Ringkasan profesional.."></textarea>
+    <section class="editor-section" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Ringkasan</h2>
+      <label class="field-full">Ringkasan profesional<textarea id="f-summary" rows="4" placeholder="Ceritakan fokus dan pengalaman profesional Anda"></textarea></label>
+    </section>
 
-    <h2>Pengalaman Kerja <button class="btn" data-add="experience">+ entri</button></h2>
-    <div id="f-experience"></div>
+    <section class="editor-section" aria-labelledby="experience-heading">
+      <div class="section-heading">
+        <h2 id="experience-heading">Pengalaman kerja</h2>
+        <button class="btn" type="button" data-add="experience">+ Tambah pengalaman</button>
+      </div>
+      <div id="f-experience"></div>
+    </section>
 
-    <h2>Pendidikan <button class="btn" data-add="education">+ entri</button></h2>
-    <div id="f-education"></div>
+    <section class="editor-section" aria-labelledby="organization-heading">
+      <div class="section-heading">
+        <h2 id="organization-heading">Pengalaman organisasi <span class="muted">(opsional)</span></h2>
+        <button class="btn" type="button" data-add="organizations">+ Tambah organisasi</button>
+      </div>
+      <div id="f-organizations"></div>
+    </section>
 
-    <h2>Keterampilan <button class="btn" data-add="skills">+ keterampilan</button></h2>
-    <div id="f-skills"></div>
+    <section class="editor-section" aria-labelledby="education-heading">
+      <div class="section-heading">
+        <h2 id="education-heading">Pendidikan</h2>
+        <button class="btn" type="button" data-add="education">+ Tambah pendidikan</button>
+      </div>
+      <div id="f-education"></div>
+    </section>
 
-    <h2>Proyek <em class="muted">(opsional — kosong = tidak ditampilkan)</em> <button class="btn" data-add="projects">+ proyek</button></h2>
-    <div id="f-projects"></div>
+    <section class="editor-section" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Keterampilan</h2>
+      <p class="muted skills-hint" id="skills-hint">Ketik keterampilan, lalu tekan Enter atau koma untuk menambahkan tag.</p>
+      <ul id="skills-tags" class="skills-tags" aria-label="Daftar keterampilan"></ul>
+      <label for="skills-input">Tambah keterampilan</label>
+      <input id="skills-input" type="text" autocomplete="off" aria-describedby="skills-hint skills-status" placeholder="Contoh: Analisis data">
+      <p id="skills-status" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
 
-    <button id="save" class="btn btn-primary">Simpan</button>
-    <button id="export" class="btn">Ekspor PDF</button>
-    <span class="muted" id="savehint"></span>
-    <p class="muted" style="font-size:13px">Ekspor PDF membuka dialog cetak browser — pilih "Save as PDF".
-     Pastikan perubahan sudah disimpan. File mengandung teks selectable, bukan gambar; hasil tetap perlu diuji di aplikasi ATS, bukan jaminan lolos ATS.</p>
+    <section class="editor-section" aria-labelledby="tools-heading">
+      <h2 id="tools-heading">Tools yang digunakan</h2>
+      <p class="muted skills-hint" id="tools-hint">Pilih rekomendasi atau ketik tools lain, lalu tekan Enter atau koma.</p>
+      <ul id="tools-tags" class="skills-tags" aria-label="Daftar tools"></ul>
+      <label for="tools-input">Tambah tools</label>
+      <input id="tools-input" type="text" list="tools-options" autocomplete="off" aria-describedby="tools-hint tools-status" placeholder="Contoh: Figma">
+      <datalist id="tools-options">
+        <option value="Figma"></option>
+        <option value="FigJam"></option>
+        <option value="Microsoft Word"></option>
+        <option value="Microsoft Excel"></option>
+        <option value="Microsoft PowerPoint"></option>
+        <option value="Microsoft Outlook"></option>
+        <option value="Adobe Photoshop"></option>
+        <option value="Adobe Illustrator"></option>
+        <option value="Adobe InDesign"></option>
+        <option value="Adobe Acrobat"></option>
+        <option value="Adobe Premiere Pro"></option>
+        <option value="Adobe After Effects"></option>
+        <option value="Google Docs"></option>
+        <option value="Google Sheets"></option>
+        <option value="Google Slides"></option>
+        <option value="Canva"></option>
+        <option value="Slack"></option>
+        <option value="Jira"></option>
+        <option value="Trello"></option>
+        <option value="Visual Studio Code"></option>
+        <option value="Git"></option>
+        <option value="GitHub"></option>
+        <option value="Tableau"></option>
+        <option value="Microsoft Power BI"></option>
+      </datalist>
+      <p id="tools-status" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="editor-section" aria-labelledby="projects-heading">
+      <div class="section-heading">
+        <h2 id="projects-heading">Proyek <span class="muted">(opsional)</span></h2>
+        <button class="btn" type="button" data-add="projects">+ Tambah proyek</button>
+      </div>
+      <div id="f-projects"></div>
+    </section>
+
+    <div class="editor-actions">
+      <button id="save" class="btn btn-primary" type="button" disabled>Simpan perubahan</button>
+      <button id="export" class="btn">Ekspor PDF</button>
+    </div>
+    <p class="editor-note">Ekspor PDF membuka dialog cetak browser. Pilih “Save as PDF”. Simpan perubahan terlebih dahulu. PDF berisi teks yang dapat dipilih, tetapi tetap perlu diuji dengan aplikasi ATS.</p>
   </section>
 
   <!-- KANAN: PREVIEW live -->
   <section class="pane pane-preview">
-    <h2>Preview <span class="muted">(tampilan mendekati PDF — bukan jaminan lolos ATS)</span></h2>
+    <h2>Pratinjau CV <span class="muted">Tampilan mendekati hasil PDF</span></h2>
     <article id="preview" class="cv"></article>
   </section>
 </main>
 
-<script src="js/api.js"></script>
-<script src="js/editor.js"></script>
+<script src="/static/js/theme.js"></script>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/editor.js"></script>
 </body>
 </html>
