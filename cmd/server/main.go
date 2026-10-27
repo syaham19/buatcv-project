@@ -14,6 +14,7 @@ import (
 
 	"cvats-opencode/internal/config"
 	"cvats-opencode/internal/database"
+
 	"github.com/joho/godotenv"
 )
 
@@ -38,7 +39,13 @@ func main() {
 
 	r := newRouter(db)
 
-	addr := fmt.Sprintf(":%d", cfg.AppPort)
+	// Deteksi PORT dari sistem Hostless, jika kosong gunakan dari config.Load()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = fmt.Sprintf("%d", cfg.AppPort)
+	}
+
+	addr := fmt.Sprintf(":%s", port)
 	log.Printf("server berjalan di http://localhost%s", addr)
 	if err := r.Run(addr); err != nil {
 		log.Fatalf("server gagal berjalan: %v", err)
@@ -52,16 +59,17 @@ func loadDotEnv() error {
 	}
 
 	for {
-		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+		goModPath := filepath.Join(dir, "go.mod")
+		if _, statErr := os.Stat(goModPath); statErr == nil {
 			envPath := filepath.Join(dir, ".env")
-			if _, err := os.Stat(envPath); errors.Is(err, os.ErrNotExist) {
+			if _, envErr := os.Stat(envPath); errors.Is(envErr, os.ErrNotExist) {
 				return nil
-			} else if err != nil {
-				return err
+			} else if envErr != nil {
+				return envErr
 			}
 			return godotenv.Load(envPath)
-		} else if err != nil && !errors.Is(err, os.ErrNotExist) {
-			return err
+		} else if !errors.Is(statErr, os.ErrNotExist) {
+			return statErr
 		}
 
 		parent := filepath.Dir(dir)
