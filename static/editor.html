@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor CV — ATS CV Generator</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="editor">
+<header class="topbar">
+  <strong>ATS CV Generator</strong>
+  <span class="spacer"></span>
+  <a class="btn" href="dashboard.html">← Dashboard</a>
+  <button id="logout" class="btn">Logout</button>
+</header>
+
+<main class="split">
+  <!-- KIRI: FORM EDITOR -->
+  <section class="pane">
+    <h1 id="titleBar">Form Editor</h1>
+    <p id="msg" class="error" hidden></p>
+
+    <label>Judul CV (untuk membedakan versi)
+      <input id="f-title" type="text" placeholder="mis. CV Product Designer">
+    </label>
+
+    <h2>Kontak & Data Diri</h2>
+    <input id="f-name" type="text" placeholder="Nama lengkap">
+    <input id="f-email" type="email" placeholder="Email">
+    <input id="f-phone" type="text" placeholder="Telepon">
+    <input id="f-location" type="text" placeholder="Kota, Negara">
+
+    <h2>Ringkasan</h2>
+    <textarea id="f-summary" rows="3" placeholder="Ringkasan profesional.."></textarea>
+
+    <h2>Pengalaman Kerja <button class="btn" data-add="experience">+ entri</button></h2>
+    <div id="f-experience"></div>
+
+    <h2>Pendidikan <button class="btn" data-add="education">+ entri</button></h2>
+    <div id="f-education"></div>
+
+    <h2>Keterampilan <button class="btn" data-add="skills">+ keterampilan</button></h2>
+    <div id="f-skills"></div>
+
+    <h2>Proyek <em class="muted">(opsional — kosong = tidak ditampilkan)</em> <button class="btn" data-add="projects">+ proyek</button></h2>
+    <div id="f-projects"></div>
+
+    <button id="save" class="btn btn-primary">Simpan</button>
+    <span class="muted" id="savehint"></span>
+  </section>
+
+  <!-- KANAN: PREVIEW live -->
+  <section class="pane pane-preview">
+    <h2>Preview <span class="muted">(tampilan mendekati PDF — bukan jaminan lolos ATS)</span></h2>
+    <article id="preview" class="cv"></article>
+  </section>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/editor.js"></script>
+</body>
+</html>

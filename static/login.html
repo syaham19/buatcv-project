@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login / Daftar — ATS CV Generator</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="authpage">
+<main class="card">
+  <h1>Login / Daftar</h1>
+  <p class="muted">Satu form, dua aksi: kartu di bawah kirim ke endpoint <code>/login</code> atau <code>/register</code>.</p>
+
+  <form id="form" autocomplete="off">
+    <label>Email
+      <input type="email" name="email" required placeholder="nama@example.com">
+    </label>
+    <label>Password (min. 8 karakter)
+      <input type="password" name="password" minlength="8" required placeholder="minimal 8 karakter">
+    </label>
+
+    <p id="msg" class="error" hidden></p>
+
+    <div class="row">
+      <button class="btn btn-primary" type="submit" data-action="login">Login</button>
+      <button class="btn" type="submit" data-action="register">Daftar</button>
+    </div>
+  </form>
+
+  <p><a href="index.html">← kembali ke halaman awal</a></p>
+</main>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

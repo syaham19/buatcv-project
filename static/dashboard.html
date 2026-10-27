@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — ATS CV Generator</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dash">
+<header class="topbar">
+  <strong>ATS CV Generator</strong>
+  <span id="who" class="muted"></span>
+  <button id="logout" class="btn">Logout</button>
+</header>
+
+<main>
+  <h1>CV Saya</h1>
+  <button id="newCV" class="btn btn-primary">+ Buat CV baru</button>
+  <p id="msg" class="error" hidden></p>
+
+  <table id="table" hidden>
+    <thead><tr><th>Judul</th><th>Terakhir diubah</th><th>Aksi</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p id="empty" class="muted" hidden>Belum ada CV. Klik "Buat CV baru" untuk memulai.</p>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

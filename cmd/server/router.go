@@ -40,10 +40,14 @@ func newRouter(db *gorm.DB) *gin.Engine {
 		cvGroup.DELETE("/:id", cv.Delete(db))
 	}
 
-	// Folder static: landing, login, dashboard, editor, preview, CSS, JS
-	r.Static("/static", "./static")
+  // Halaman utama: file di folder static/
+  r.StaticFile("/", "./static/index.html")
+  r.StaticFile("/login", "./static/login.html")
+  r.StaticFile("/dashboard", "./static/dashboard.html")
+  r.StaticFile("/editor", "./static/editor.html")
 
-	// Tambahkan rute halaman (page route) di tahap frontend
+	// Folder static: CSS dan JS
+	r.Static("/static", "./static")
 
 	return r
 }

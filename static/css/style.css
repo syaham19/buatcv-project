@@ -1,0 +1,70 @@
+/* Style sederhana satu kolom, responsif mobile-first. */
+:root{
+  --ink:#1c2530; --muted:#7a8794; --line:#e3e8ed;
+  --accent:#1a6ef5; --bg:#ffffff; --soft:#f5f7fa;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+.muted{color:var(--muted)}
+
+.topbar{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.topbar .spacer{flex:1}
+main{padding:16px;max-width:960px;margin:auto}
+
+.hero{padding:48px 16px;max-width:640px;margin:auto}
+.box{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px;margin:16px 0}
+.footer{text-align:center;padding:24px}
+
+/* Button */
+.btn{display:inline-block;padding:8px 14px;border:1px solid var(--line);border-radius:8px;
+     background:var(--bg);color:var(--ink);cursor:pointer;font-size:14px;font-family:inherit}
+.btn:hover{background:var(--soft)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{opacity:.9;background:var(--accent)}
+.btn-lg{padding:12px 24px;font-size:16px}
+.btn-sm{padding:4px 10px;font-size:13px}
+
+/* Card (login/register) */
+.card{max-width:420px;margin:48px auto;padding:24px;border:1px solid var(--line);border-radius:12px}
+.card p{color:var(--muted);font-size:14px}
+.card form{display:flex;flex-direction:column;gap:12px}
+.card .row{display:flex;gap:8px}
+
+/* Form elements global */
+label{display:block;margin:12px 0 4px;font-size:14px}
+input,textarea,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:14px}
+textarea{resize:vertical}
+.error{color:#c0392b}
+#msg{padding:8px;background:#fdecea;border-radius:6px}
+
+/* Table dashboard */
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size:14px}
+
+/* Editor split: form kiri, preview kanan */
+.split{display:flex;gap:16px;max-width:1200px;margin:auto;padding:16px;align-items:flex-start}
+.pane{flex:1;min-width:0}
+.pane-preview{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:20px 24px;position:sticky;top:16px}
+@media(max-width:900px){.split{flex-direction:column}.pane-preview{position:static}}
+
+.entry{border:1px solid var(--line);border-radius:8px;padding:12px;margin:8px 0;background:#fff}
+.entry .row{display:flex;gap:8px}
+.entry input,.entry textarea{margin-bottom:6px}
+
+/* Preview CV: tata letak sederhana ramah ATS */
+.cv{background:#fff;padding:24px;border-radius:8px}
+.cv h1{font-size:22px;margin:0 0 4px}
+.cv h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line);padding-bottom:2px;margin:18px 0 8px}
+.cv .contact{font-size:13px;color:var(--muted)}
+.cv .item{margin:0 0 10px}
+.cv .item-head{display:flex;justify-content:space-between;font-size:14px}
+.cv .item-head b{font-size:14px}
+.cv .item-dates{color:var(--muted);font-size:13px}
+.cv ul{margin:6px 0;padding-left:18px}
+.cv li{margin:2px 0;font-size:14px}
+
+/* Cekackbar */
+.entry .row .btn{flex:none}
+/* Proyek (bagian opsional kosong tidak ditampilkan) */
+.muted{color:var(--muted)}
